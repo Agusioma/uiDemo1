@@ -17,17 +17,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
@@ -63,7 +71,7 @@ class MainActivity : ComponentActivity() {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(30.dp)
+                            .padding(40.dp)
                             .background(color = MaterialTheme.colorScheme.background),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -72,6 +80,7 @@ class MainActivity : ComponentActivity() {
                         shoeImageRow()
                         priceOptionsRow()
                         chipRow()
+                        bottomRow()
                     }
 
                 }
@@ -99,11 +108,13 @@ fun titleRow() {
     ) {
         Column {
             Text(
+                color = Color.Black,
                 text = "Runfalcon",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
+                color = Color.Black,
                 text = "sneakers",
                 fontSize = 30.sp
             )
@@ -138,16 +149,85 @@ fun chipRow() {
             .padding(top = 25.dp)
     ) {
         var basePrice = 38.5
-        items(6) {index ->
-            AssistChip(
-                onClick = { /* Do something! */ },
-                modifier = Modifier.padding(end = 5.dp),
-                label = { Text("${basePrice + (index*2)}") },
+        items(6) { index ->
+
+            OutlinedButton(
+
+                onClick = {},
+                modifier = Modifier.padding(end = 10.dp).wrapContentWidth(),
+                border = BorderStroke(width = 1.dp, color = btnBorderColor(index)),
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = btnContainerColor(index),
+                    contentColor = Color.Black
                 )
+            ) {
+                Text(
+                color = Color.Black,text = "${basePrice + (index * 2)}")
+            }
         }
 
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun bottomRow() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 25.dp, bottom = 10.dp)
+    ) {
+        Card(
+            shape = RoundedCornerShape(50),
+            colors = CardDefaults.cardColors(containerColor = Color.Black)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            ) {
+                Text(
+                    text = "Add to cart",
+                    fontSize = 15.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Spacer(modifier = Modifier.weight(3F))
+                IconButton(onClick = { /* doSomething() */ },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.background,
+                        contentColor = Color.Black)
+                    ) {
+                    Icon(painter = painterResource(id = R.drawable.shopping_bag_5_1_svgrepo_com), contentDescription = "Localized description")
+                }
+            }
+        }
+    }
+}
+
+fun btnBorderColor(index: Int): Color {
+
+    if (index == 1) {
+        return Color.Black
+    } else {
+        return Color.Transparent
+    }
+}
+
+fun btnContainerColor(index: Int): Color {
+
+    if (index == 1) {
+        return Color.Transparent
+    } else {
+        return Color.White
+    }
+}
+
 @Composable
 fun priceOptionsRow() {
     var state by remember { mutableStateOf(true) }
@@ -159,10 +239,12 @@ fun priceOptionsRow() {
     ) {
         Column {
             Text(
+                color = Color.Black,
                 text = "PRICE:",
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
             Text(
+                color = Color.Black,
                 text = "$276",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
@@ -170,61 +252,63 @@ fun priceOptionsRow() {
 
         }
 
-        Spacer(modifier = Modifier.weight(3F))
+        Spacer(modifier = Modifier.weight(2F))
 
         Column {
             Text(
+                color = Color.Black,
                 text = "COLORS:",
-                fontSize = 10.sp
+                fontSize = 12.sp
             )
             Row(
                 modifier = Modifier.padding(top = 10.dp)
             ) {
                 IconToggleButton(checked = state,
                     colors =
-                        if (state) {
-                            IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.White)
-                        } else {
-                            IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.Transparent)
-                        }
-                    ,
-                    modifier = Modifier.size(20.dp),
+                    if (state) {
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.White)
+                    } else {
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.Transparent)
+                    },
+                    modifier = Modifier
+                        .size(20.dp),
                     onCheckedChange = { state = it }) {
                     Icon(
                         painter = painterResource(id = R.drawable.circle_svgrepo_com__1_),
-                        contentDescription = "Localized description"
+                        contentDescription = "Localized description",
+                        tint = Color(0xFFea5d5d)
                     )
                 }
 
                 IconToggleButton(checked = !state,
                     colors =
                     if (state) {
-                        IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.White)
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.White)
                     } else {
-                        IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.Transparent)
-                    }
-                    ,
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.Transparent)
+                    },
                     modifier = Modifier.size(20.dp),
                     onCheckedChange = { state = it }) {
                     Icon(
                         painter = painterResource(id = R.drawable.circle_svgrepo_com__1_),
-                        contentDescription = "Localized description"
+                        contentDescription = "Localized description",
+                        tint = Color(0xFF000000)
                     )
                 }
 
                 IconToggleButton(checked = !state,
                     colors =
                     if (state) {
-                        IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.White)
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.White)
                     } else {
-                        IconButtonDefaults.iconToggleButtonColors( checkedContainerColor = Color.Transparent)
-                    }
-                    ,
+                        IconButtonDefaults.iconToggleButtonColors(checkedContainerColor = Color.Transparent)
+                    },
                     modifier = Modifier.size(20.dp),
                     onCheckedChange = { state = it }) {
                     Icon(
                         painter = painterResource(id = R.drawable.circle_svgrepo_com__1_),
-                        contentDescription = "Localized description"
+                        contentDescription = "Localized description",
+                        tint = Color(0xFFffffff)
                     )
                 }
             }
@@ -248,7 +332,8 @@ fun topButton(drawableIconInt: Int) {
             )
             .width(30.dp)
             .height(45.dp),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = Color.Black
     ) {
         Icon(
             painter = painterResource(drawableIconInt),
